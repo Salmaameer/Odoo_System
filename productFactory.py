@@ -8,5 +8,3 @@ class ProductFactory():
 
 
 
-p = ProductFactory.create("salma",34,"dfd",89)
-print(p)

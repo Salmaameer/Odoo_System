@@ -72,9 +72,10 @@ class Customer(BaseModel):
         print (f"id :{self._id}")
         print (f"name : {self._name}")
         print (f"phone : {self._phone}")
-        print (f"emile : {self._emile}")
+        print (f"emile : {self._email}")
         print (f"address : {self._address}")
         print(f"Orders count: {len(self._orders)}")
         print(f"Invoices count: {len(self._invoices)}")
+
     def __str__(self):
-        return f"{self.__class__.__name__}(id={self._id}, name={self.name}, phone={self._phone}, emile={self._emile}, address={self._address})"
+        return f"{self.__class__.__name__}(id={self._id}, name={self.name}, phone={self._phone}, emile={self._email}, address={self._address})"

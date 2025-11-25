@@ -1,5 +1,6 @@
 from product import Product
 from productFactory import ProductFactory
+from customer import Customer  # assuming you have a Customer class
 
 
 
@@ -26,18 +27,48 @@ def listProducts():
             print(p)
             print("\n")
 
-
+def listCutsomers():
+    if not customers:
+        print("no Customers on the system") 
+    else: 
+        print("Customers: \n")
+        for c in customers:
+            print(c)
+            print("\n")
 
 def crtCust():
-     name = input("Enter Customer name: ")
+    name = input("Enter Customer name: ")
+    phone = input("Enter Customer phone: ")
+    email = input("Enter Customer email: ")
+    address = input("Enter Customer address: ")
 
+    # Create a new Customer instance
+    new_customer = Customer(name, phone, email, address)
+
+    # Add to the list
+    customers.append(new_customer)
+    print(f"Customer '{name}' added successfully!\n")
+
+def viewCustDetails(id):
+    for c in customers:
+        if c.id == id:
+            print("Customer found:")
+            print(c)
+            return  # exit the function after finding
+    print(f"No customer found with id {id}")
+
+def crtNewOrder():
+    pass
 
 
 def main():
+    # c = Customer("salma","123","das","34343")
+    # customers.append(c)
+    # viewCustDetails(1)
 
     while(True):
 
-        print("Welcome to our OODO system\n\n" \
+        print("\n\nWelcome to our OODO system\n\n" \
         "these are our services:\n\n" \
         "1- create customer\n" \
         "2- add new product\n" \
@@ -53,15 +84,16 @@ def main():
         choice = input("Enter your choice: ")
 
         if choice == "1":
-            pass
+            crtCust()
         elif choice == "2":
             addNewProd()
         elif choice == "3":
-            pass  
+            listCutsomers()  
         elif choice == "4":
             listProducts()      
         elif choice == "5":
-            pass  
+            cId = int(input("Enter customer ID: "))
+            viewCustDetails(cId)
         elif choice == "6":
             pass  
         elif choice == "7":
@@ -80,3 +112,4 @@ def main():
 
 
 main()            
+
