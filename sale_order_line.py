@@ -6,6 +6,7 @@ class SaleOrderLine(BaseModel):
         self._quantity=quantity
         self.price=product.price
         self.subtotal= self.price*self._quantity
+        
     def __str__(self):
         return (
     f"SaleOrderLine(id={self._id}, product={self._product.name}, "

@@ -1,6 +1,6 @@
 from base import BaseModel
 from sale_order_line import SaleOrderLine
-from Invoice import Inovice
+from invoice import Inovice
 
 
 class SaleOrder (BaseModel):
@@ -15,10 +15,12 @@ class SaleOrder (BaseModel):
     def lines(self):
         return self._lines
     
+    # add item to the order
     def add_line(self,product,quantity):
         if quantity <=0:
          raise ValueError ("quantity must be > 0 ")
-        line =SaleOrderLine(product,quantity)
+        
+        line = SaleOrderLine(product,quantity)
         self._lines.append(line)
         return line 
     
@@ -29,9 +31,11 @@ class SaleOrder (BaseModel):
             raise ValueError("Cannot confirm an empty order")
 
         self.state = "confirmed"
-        inv= Inovice(f"inv-{self._id}",self._customer)
+        inv = Inovice(self._customer) # create new invoice with the customer
+
         for line in self._lines:
-            inv.add_line(line.product,line.quantity,line.price)
+            inv.addLine(line)
+
         self.invoice =inv
         self._customer.add_order(self)
         self._customer.add_invoice(inv)
@@ -46,5 +50,6 @@ class SaleOrder (BaseModel):
 
 
 
- 
+    
 
+order = SaleOrder("o1",)
