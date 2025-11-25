@@ -18,7 +18,7 @@ class SaleOrder (BaseModel):
     def add_line(self,product,quantity):
         if quantity <=0:
          raise ValueError ("quantity must be > 0 ")
-        line =SaleOrderLine(product,quantity)
+        line = SaleOrderLine(product,quantity)
         self._lines.append(line)
         return line 
     
@@ -29,9 +29,10 @@ class SaleOrder (BaseModel):
             raise ValueError("Cannot confirm an empty order")
 
         self.state = "confirmed"
-        inv= Inovice(f"inv-{self._id}",self._customer)
+        inv = Inovice(self._customer)
         for line in self._lines:
-            inv.add_line(line.product,line.quantity,line.price)
+            inv.addLine(line)
+
         self.invoice =inv
         self._customer.add_order(self)
         self._customer.add_invoice(inv)
