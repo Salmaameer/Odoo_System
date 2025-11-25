@@ -1,18 +1,19 @@
 from base import BaseModel
 class Customer(BaseModel):
 
-    def __init__(self,name,phone, emile= None, address =None):
+    def __init__(self,name,phone, email, address):
         super().__init__(name)
         self._phone=phone
-        self._emile=emile
+        self._email=email
         self._address=address
         self._orders=[]
         self._invoices=[]
+        
     @property
     def phone(self):
         return self._phone
     @property
-    def emile(self):
+    def email(self):
         return self._emile
     
     @property
@@ -30,9 +31,10 @@ class Customer(BaseModel):
         
             raise ValueError("invalid phone ")
         self._phone=value
-    @emile.setter
+
+    @email.setter
     def emile(self,value):
-        self._emile=value
+        self._email=value
  
     @address.setter
     def address(self,value):
@@ -49,11 +51,11 @@ class Customer(BaseModel):
         for order in self._order:
             if order.state == "confirmed":
                 for x in order.lines:
-                    total+= x.subtotal
+                    total += x.subtotal
                    
         return total
     def total_voices(self):
-        total=0
+        total = 0
         for invoice in self._invoices:
             if invoice.state =="posted" :
                 for x in invoice.lines:
