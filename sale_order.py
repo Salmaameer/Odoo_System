@@ -1,6 +1,6 @@
 from base import BaseModel
 from sale_order_line import SaleOrderLine
-from invoice import Inovice
+from invoice import Invoice
 
 
 class SaleOrder (BaseModel):
