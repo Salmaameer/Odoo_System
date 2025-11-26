@@ -1,6 +1,6 @@
 from product import Product
 from productFactory import ProductFactory
-from Customer import Customer
+from customer import Customer
 from sale_order import SaleOrder
 from sale_order_line import SaleOrderLine
 from invoice import Invoice
@@ -76,11 +76,16 @@ def crtNewOrder():
         if prod_id == 0:
             break
         qty = int(input("Enter quantity: "))
+        # check for the quantity before 
         product = next((p for p in products if p.id == prod_id), None)
         if not product:
             print("Product not found!")
             continue
-        new_order.add_lines(product, qty)
+        if product.quantity < qty:
+            print("Not available stock, choose lower quantity!")
+            continue
+       
+        new_order.add_line(product, qty)
     
     orders.append(new_order)
     customer.add_order(new_order)

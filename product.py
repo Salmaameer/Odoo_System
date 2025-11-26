@@ -30,12 +30,12 @@ class Product(BaseModel):
         self._price = pValue
 
     @description.setter
-    def price(self, dValue):
+    def description(self, dValue):
         self._description = dValue
 
     @quantity.setter
-    def price(self, qValue):
-        self.quantity = qValue     
+    def quantity(self, qValue):
+        self._quantity = qValue     
 
 
     def __str__(self):
