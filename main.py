@@ -2,8 +2,7 @@ from product import Product
 from productFactory import ProductFactory
 from customer import Customer
 from sale_order import SaleOrder
-from sale_order_line import SaleOrderLine
-from invoice import Invoice
+
 
 products = []
 customers = []
@@ -11,20 +10,46 @@ orders = []
 invoices = []
 
 def addNewProd():
-    name = input("Enter product name: ")
-    price = float(input("Enter product price: "))
+
+    while True:
+        name = input("Enter product name: ").strip()
+        if name:
+            break
+        print("❌ Name cannot be empty. Please try again.")
+
+    while True:
+        price_input = input("Enter product price: ").strip()
+        try:
+            price = float(price_input)
+            if price > 0:
+                break
+            print("❌ Price must be greater than zero")
+
+        except ValueError:
+            print("❌ Please enter a valid number for price")
+
     desc  = input("Enter product desc: ")
-    qnt   = int(input("Enter product quantity: "))
+
+    while True:
+        qnt_input = input("Enter product quantity: ").strip()
+        try:
+            qnt = int(qnt_input)
+            if qnt >= 1:
+                break
+            print("❌ Quantity cannot be less than 1")
+        except ValueError:
+            print("❌ Please enter a valid integer for quantity.")    
+            
     p = ProductFactory.create(name, price, desc, qnt)
     products.append(p)
     print(p)
-    print("Product added successfully!")
+    print("✅ Product added successfully!")
 
 def listProducts():
     if not products:
         print("No available products\n\n") 
     else: 
-        print("Available products: ")
+        print("\n\nAvailable products: ")
         for p in products:
             print(p)
             print("\n")
@@ -39,10 +64,33 @@ def listCustomers():
             print("\n")
 
 def crtCust():
-    name = input("Enter Customer name: ")
-    phone = input("Enter Customer phone: ")
-    email = input("Enter Customer email: ")
-    address = input("Enter Customer address: ")
+
+    while(True):
+        name = input("Enter Customer name: ").strip()
+        if name:
+            break
+        print("❌ Name cannot be empty. Please try again.")
+
+    while(True):
+        phone = input("Enter Customer phone: ").strip()
+        if phone.isdigit() and len(phone) == 12:
+            break
+        print("❌ Invalid phone number. Please try again.")
+
+    #validate the email using regex
+    regEmail = r"^[\w\.-]+@[\w\.-]+\.\w+$"
+    while(True):
+        email = input("Enter Customer email: ")
+        if re.match(regEmail, email):
+            break
+        print("❌ Invalid email address, please try again")
+
+    while(True):
+        address = input("Enter Customer address: ")
+        if address:
+            break
+        print("❌ address can't be empty!")
+        
     new_customer = Customer(name, phone, email, address)
     customers.append(new_customer)
     print(f"Customer '{name}' added successfully!\n")
@@ -86,6 +134,8 @@ def crtNewOrder():
             continue
        
         new_order.add_line(product, qty)
+        oldQty = product.quantity
+        product.quantity = oldQty - qty  # update the stock 
     
     orders.append(new_order)
     customer.add_order(new_order)
@@ -99,9 +149,9 @@ def confirmOrder():
         print("Order not found!")
         return
     try:
-        order.confirm()
+        oInv = order.confirm()
         invoices.append(order.invoice)
-        print(f"Order {order.id} confirmed! Invoice created: {order.invoice}")
+        print(f"Order {order.name} confirmed! Invoice created: {oInv}")
     except Exception as e:
         print(f"Error confirming order: {e}")
 
