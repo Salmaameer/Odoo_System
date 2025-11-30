@@ -6,8 +6,8 @@ class Customer(BaseModel):
         self._phone=phone
         self._email=email
         self._address=address
-        self._orders=[]
-        self._invoices=[]
+        self._orders = []
+        self._invoices = []
         
     @property
     def phone(self):
@@ -28,12 +28,11 @@ class Customer(BaseModel):
     @phone.setter
     def phone (self, value):
         if not value.isdigit() or len(value)!=11:
-        
             raise ValueError("invalid phone ")
         self._phone=value
 
     @email.setter
-    def emile(self,value):
+    def email(self,value):
         self._email=value
  
     @address.setter
@@ -54,7 +53,9 @@ class Customer(BaseModel):
                     total += x.subtotal
                    
         return total
-    def total_voices(self):
+    
+
+    def total_invoices(self):
         total = 0
         for invoice in self._invoices:
             if invoice.state =="posted" :
@@ -72,7 +73,7 @@ class Customer(BaseModel):
         print (f"id :{self._id}")
         print (f"name : {self._name}")
         print (f"phone : {self._phone}")
-        print (f"emile : {self._email}")
+        print (f"email : {self._email}")
         print (f"address : {self._address}")
         print(f"Orders count: {len(self._orders)}")
         print(f"Invoices count: {len(self._invoices)}")

@@ -2,22 +2,20 @@ from base import BaseModel
 from sale_order_line import SaleOrderLine
 from invoice import Invoice
 
-
 class SaleOrder (BaseModel):
     def __init__(self, name ,customer):
         super().__init__(name)
         self._customer=customer
         self._lines=[]
-        self.state="draft"
-        self.invoice= None
+        self.state = "draft"
+        self.invoice = None
 
     @property
     def lines(self):
         return self._lines
     
     def add_line(self,product,quantity):
-        if quantity <=0:
-         raise ValueError ("quantity must be > 0 ")
+
         line = SaleOrderLine(product,quantity)
         self._lines.append(line)
         return line 
@@ -29,12 +27,12 @@ class SaleOrder (BaseModel):
             raise ValueError("Cannot confirm an empty order")
 
         self.state = "confirmed"
-        inv = Inovice(self._customer)
+        inv = Invoice(self._customer)
         for line in self._lines:
             inv.addLine(line)
+            print(f"ln-{line}")
 
-        self.invoice =inv
-        self._customer.add_order(self)
+        self.invoice = inv
         self._customer.add_invoice(inv)
         return inv
     

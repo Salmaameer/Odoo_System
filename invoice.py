@@ -4,61 +4,48 @@ class Invoice(BaseModel):
     _next_num = 1
 
     def __init__(self,customer):
-        name = "In"+ Invoice._next_num  #customer readable id
+        name = "In-" + str(Invoice._next_num)      #customer readable id
+        Invoice._next_num += 1
+
         super().__init__(name)
-        self.customer = customer
-        self.lines = []
-        self.total = 0.0
+        self._customer = customer
+        self._lines = []
+        self._total = 0.0
 
 
     @property
     def customer(self):
-        return self.customer
+        return self._customer
+
 
     @customer.setter
-    def customer(self,c):
-        if not c:
-            raise ValueError
-        else:
-            self.customer = c
+    def customer(self, value):
+        if not value:
+            raise ValueError("Customer must not be empty")
+        self._customer = value
 
 
     @property
     def lines(self):
-        return self.lines
+        return self._lines
 
     @lines.setter
-    def lines(self,lns):
-        self.lines = lns
+    def lines(self, value):
+        self._lines = value
         ##update the total & subtotal per line added
-        self.calculateTotal()
-
-
-    @property    #total could only read
+        self._recalculate_total()
+   
+    @property
     def total(self):
-        return self.total
+        return self._total
 
+    def addLine(self, line):
+        self._lines.append(line)
+        self._total += line.subtotal
 
-    def addLine(self, ln):
-        self.lines.append(ln)
-        self.updateInvcTotal(ln)
-    
-    # private helper functions
-    def _calculateTotal(self):
-        ttl = 0.0
-        for line in self.lines:
-            ttl += line.subTotal
-        self.total = ttl            #set the total for the first time
+    # Helper to recalc full total
+    def _recalculate_total(self):
+        self._total = sum(line.subtotal for line in self._lines)
 
-    def _updateInvcTotal(self,line):  #update after adding one line
-        lnSubttl = line.subtotal
-        updatedTtl = lnSubttl + self.total
-        self.total = updatedTtl
-
-
-    #print invoice info
     def __str__(self):
-        return (
-            f"Invoice #{self.name},"
-            f"\nsubtotal: {self.subtotal} EGP"
-        )  
+        return f"Invoice #{self.name}, total: {self.total} EGP"
